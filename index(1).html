@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felix Zandanel — Jr. Projectleider Ruimtelijke Planvorming & Projecten</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #e8e4de;
+            --accent: #c4a46c;
+            --accent-soft: #c4a46c22;
+            --muted: #6b6560;
+            --card: #141210;
+            --card-border: #1f1c18;
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'DM Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-weight: 300;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* --- Grain overlay --- */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg), transparent);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-logo {
+            font-family: var(--serif);
+            font-size: 1.4rem;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* --- Hero --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 3rem;
+            position: relative;
+        }
+
+        .hero-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            max-width: 900px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.4s;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 480px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.6s;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 1s;
+        }
+
+        .scroll-line {
+            width: 40px;
+            height: 1px;
+            background: var(--muted);
+            animation: scrollPulse 2s ease infinite;
+        }
+
+        /* --- Decorative circle --- */
+        .hero-decor {
+            position: absolute;
+            right: 8%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            border: 1px solid var(--card-border);
+            opacity: 0;
+            animation: fadeIn 1.2s ease forwards 0.8s;
+        }
+
+        .hero-decor::after {
+            content: '';
+            position: absolute;
+            inset: 30px;
+            border-radius: 50%;
+            border: 1px solid var(--accent-soft);
+            background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+        }
+
+        /* --- Sections --- */
+        section {
+            padding: 8rem 3rem;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--card-border);
+        }
+
+        /* --- Over mij --- */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text h2 {
+            font-family: var(--serif);
+            font-size: 2.8rem;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .about-text p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-content: center;
+        }
+
+        .stat {
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            background: var(--card);
+            transition: border-color 0.4s, transform 0.4s;
+        }
+
+        .stat:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-family: var(--serif);
+            font-size: 2.5rem;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* --- Ervaring --- */
+        .experience-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exp-card {
+            display: grid;
+            grid-template-columns: 200px 1fr auto;
+            align-items: center;
+            gap: 3rem;
+            padding: 2.5rem;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            background: var(--card);
+            transition: border-color 0.4s, transform 0.3s;
+            cursor: default;
+        }
+
+        .exp-card:hover {
+            border-color: var(--accent);
+            transform: translateX(8px);
+        }
+
+        .exp-year {
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        .exp-info h3 {
+            font-weight: 500;
+            font-size: 1.15rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .exp-info p {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .exp-tag {
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+        }
+
+        /* --- Skills --- */
+        .skills-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .skills-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .skill-pill {
+            padding: 0.8rem 1.8rem;
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text);
+            background: var(--card);
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .skill-pill:hover {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .skill-pill.featured {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* --- Contact --- */
+        .contact-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 10rem 3rem;
+        }
+
+        .contact-section h2 {
+            font-family: var(--serif);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-section h2 em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .contact-section p {
+            color: var(--muted);
+            margin-bottom: 3rem;
+            font-size: 1rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 1rem 2.5rem;
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-family: var(--sans);
+            letter-spacing: 0.05em;
+            transition: all 0.3s;
+            background: transparent;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .contact-btn.primary {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .contact-btn.primary:hover {
+            background: #d4b47c;
+            transform: translateY(-2px);
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--card-border);
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.6; }
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; width: 40px; }
+            50% { opacity: 1; width: 60px; }
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero { padding: 0 1.5rem; }
+            .hero-decor { display: none; }
+            section { padding: 5rem 1.5rem; }
+            .about { grid-template-columns: 1fr; gap: 3rem; }
+            .exp-card { grid-template-columns: 1fr; gap: 0.8rem; padding: 1.5rem; }
+            .exp-tag { justify-self: start; }
+            .contact-section { padding: 5rem 1.5rem; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">FZ.</div>
+        <ul class="nav-links">
+            <li><a href="#over">Over mij</a></li>
+            <li><a href="#ervaring">Ervaring</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-label">Welkom op mijn pagina</div>
+        <h1>Felix Zandanel,<br>Jr. <em>Projectleider</em></h1>
+        <p class="hero-sub">Ruimtelijke planvorming & projecten bij de Gemeente Ede.</p>
+        <div class="hero-scroll">
+            <div class="scroll-line"></div>
+            Scroll
+        </div>
+        <div class="hero-decor"></div>
+    </section>
+
+    <!-- Over mij -->
+    <section id="over">
+        <div class="section-label reveal">Over mij</div>
+        <div class="about">
+            <div class="about-text reveal">
+                <h2>Bouwen aan de publieke ruimte van morgen</h2>
+                <p>Als Jr. Projectleider Ruimtelijke Planvorming & Projecten bij de Gemeente Ede werk ik dagelijks aan infrastructuur- en gebiedsontwikkelingsprojecten die onze leefomgeving vormgeven. Ik coördineer, verbind en zorg dat plannen werkelijkheid worden.</p>
+                <p>Met een Master in Urban and Economic Geography en een Bachelor in Economics & Business Economics aan de Universiteit Utrecht combineer ik ruimtelijk inzicht met economisch denken. Altijd op zoek naar slimme manieren om projecten efficiënter en toegankelijker te maken.</p>
+            </div>
+            <div class="about-stats reveal">
+                <div class="stat">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Projecten</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Stakeholders</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Inzet</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Koffie gedronken</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ervaring -->
+    <section id="ervaring">
+        <div class="section-label reveal">Ervaring</div>
+        <div class="experience-grid">
+            <div class="exp-card reveal">
+                <div class="exp-year">2025 — heden</div>
+                <div class="exp-info">
+                    <h3>Jr. Projectleider Ruimtelijke Planvorming & Projecten</h3>
+                    <p>Gemeente Ede — Fulltime</p>
+                </div>
+                <div class="exp-tag">Huidig</div>
+            </div>
+            <div class="exp-card reveal">
+                <div class="exp-year">2023 — 2025</div>
+                <div class="exp-info">
+                    <h3>Football Stats Operator</h3>
+                    <p>Gracenote — Parttime</p>
+                </div>
+                <div class="exp-tag">1 jr 6 mnd</div>
+            </div>
+            <div class="exp-card reveal">
+                <div class="exp-year">2023 — 2024</div>
+                <div class="exp-info">
+                    <h3>Master Urban and Economic Geography</h3>
+                    <p>Universiteit Utrecht</p>
+                </div>
+                <div class="exp-tag">Opleiding</div>
+            </div>
+            <div class="exp-card reveal">
+                <div class="exp-year">2019 — 2023</div>
+                <div class="exp-info">
+                    <h3>Bachelor Economics & Business Economics</h3>
+                    <p>Universiteit Utrecht — Minor in Economic Geography</p>
+                </div>
+                <div class="exp-tag">Opleiding</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <div class="section-label reveal">Vaardigheden</div>
+        <div class="skills-container reveal">
+            <div class="skills-flex">
+                <span class="skill-pill featured">Ruimtelijke Planvorming</span>
+                <span class="skill-pill featured">Projectleiding</span>
+                <span class="skill-pill featured">Gebiedsontwikkeling</span>
+                <span class="skill-pill">Stakeholdermanagement</span>
+                <span class="skill-pill">Communicatieplanning</span>
+                <span class="skill-pill">Economische Geografie</span>
+                <span class="skill-pill">Microsoft Excel</span>
+                <span class="skill-pill">Planning & Organisatie</span>
+                <span class="skill-pill">HTML / CSS / JS</span>
+                <span class="skill-pill">Digitale Tools</span>
+                <span class="skill-pill">AI & Automatisering</span>
+                <span class="skill-pill">Nederlands</span>
+                <span class="skill-pill">Engels</span>
+                <span class="skill-pill">Duits</span>
+                <span class="skill-pill">Rijbevoegd (B)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="contact-section reveal">
+            <h2>Laten we <em>samenwerken</em></h2>
+            <p>Interesse in een gesprek? Neem gerust contact op.</p>
+            <div class="contact-links">
+                <a href="mailto:felix@voorbeeld.nl" class="contact-btn primary">E-mail sturen</a>
+                <a href="https://nl.linkedin.com/in/zandanel-felix" target="_blank" class="contact-btn">LinkedIn</a>
+                <a href="https://github.com/JamesHond026" target="_blank" class="contact-btn">GitHub</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>© 2026 Felix Zandanel</span>
+        <span>Gebouwd met passie & koffie</span>
+    </footer>
+
+    <!-- Scroll reveal script -->
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Staggered animatie voor elementen die tegelijk in beeld komen
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        reveals.forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
